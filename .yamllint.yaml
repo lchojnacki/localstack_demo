@@ -1,0 +1,8 @@
+---
+extends: 'default'
+rules:
+  quoted-strings:
+    quote-type: 'single'
+    required: true
+  document-start:
+    present: true

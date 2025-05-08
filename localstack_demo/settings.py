@@ -158,6 +158,34 @@ STORAGES = {
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", "xxx")
 AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", "xxx")
 AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_REGION = env("AWS_DEFAULT_REGION", "us-east-1")
+
+# SQS and Celery settings
+AWS_SQS_QUEUE_NAME = env("AWS_SQS_QUEUE_NAME", "celery")
+
+# Celery settings
+CELERY_BROKER_URL = f"sqs://{AWS_ACCESS_KEY_ID}:{AWS_SECRET_ACCESS_KEY}@"
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    "region": AWS_DEFAULT_REGION,
+    "endpoint_url": AWS_ENDPOINT_URL,
+    "access_key_id": AWS_ACCESS_KEY_ID,
+    "secret_access_key": AWS_SECRET_ACCESS_KEY,
+    "predefined_queues": {
+        AWS_SQS_QUEUE_NAME: {
+            "url": f"{AWS_ENDPOINT_URL}/000000000000/celery",
+            "access_key_id": AWS_ACCESS_KEY_ID,
+            "secret_access_key": AWS_SECRET_ACCESS_KEY,
+        }
+    },
+}
+
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = TIME_ZONE
+
+# Redis result backend
+CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", "redis://redis:6379/0")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

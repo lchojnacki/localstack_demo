@@ -1,5 +1,7 @@
 ---
 extends: 'default'
+ignore: |
+  slides/localstack/pnpm-lock.yaml
 rules:
   quoted-strings:
     quote-type: 'single'
